@@ -1,10 +1,12 @@
 package uz.brogrammer.petclinic.service.map;
 
+import org.springframework.stereotype.Service;
 import uz.brogrammer.petclinic.model.Pet;
 import uz.brogrammer.petclinic.service.PetService;
 
 import java.util.Set;
 
+@Service
 public class PetServiceMap extends AbstractMapService<Pet, Long> implements PetService {
     @Override
     public void delete(Pet object) {
