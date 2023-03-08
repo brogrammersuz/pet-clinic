@@ -1,5 +1,6 @@
 package uz.brogrammer.petclinic.bootstrap;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import uz.brogrammer.petclinic.model.Owner;

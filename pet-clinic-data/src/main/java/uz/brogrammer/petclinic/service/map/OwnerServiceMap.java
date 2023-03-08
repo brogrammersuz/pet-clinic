@@ -1,5 +1,7 @@
 package uz.brogrammer.petclinic.service.map;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import uz.brogrammer.petclinic.model.Owner;
 import uz.brogrammer.petclinic.service.OwnerService;
