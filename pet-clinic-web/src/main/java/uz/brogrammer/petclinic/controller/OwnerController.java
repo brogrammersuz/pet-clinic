@@ -22,4 +22,9 @@ public class OwnerController {
         model.addAttribute("owners", list);
         return "owner/index";
     }
+
+    @RequestMapping({"/find"})
+    public String findHandler() {
+        return "notimplemented";
+    }
 }

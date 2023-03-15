@@ -1,11 +1,18 @@
 package uz.brogrammer.petclinic.model;
 
-import java.time.LocalDate;
+import jakarta.persistence.*;
 
+import java.time.LocalDate;
+@Entity
+@Table(name="visit")
 public class Visit extends BaseEntity {
 
+    @Column(name ="local_date")
     private LocalDate localDate;
+    @Column(name="description")
     private String description;
+    @ManyToOne
+    @JoinColumn(name="pet_id")
     private Pet pet;
 
     public LocalDate getLocalDate() {
@@ -30,5 +37,14 @@ public class Visit extends BaseEntity {
 
     public void setPet(Pet pet) {
         this.pet = pet;
+    }
+
+    @Override
+    public String toString() {
+        return "Visit{" +
+                "localDate=" + localDate +
+                ", description='" + description + '\'' +
+                ", pet=" + pet +
+                '}';
     }
 }
