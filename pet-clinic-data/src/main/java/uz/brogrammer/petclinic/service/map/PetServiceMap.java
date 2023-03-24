@@ -1,11 +1,13 @@
 package uz.brogrammer.petclinic.service.map;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import uz.brogrammer.petclinic.model.Pet;
 import uz.brogrammer.petclinic.service.PetService;
 
 import java.util.Set;
 
+@Profile({"default", "map"})
 @Service
 public class PetServiceMap extends AbstractMapService<Pet, Long> implements PetService {
     @Override

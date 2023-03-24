@@ -1,5 +1,6 @@
 package uz.brogrammer.petclinic.service.map;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import uz.brogrammer.petclinic.model.Owner;
 import uz.brogrammer.petclinic.model.Pet;
@@ -7,8 +8,10 @@ import uz.brogrammer.petclinic.service.OwnerService;
 import uz.brogrammer.petclinic.service.PetService;
 import uz.brogrammer.petclinic.service.PetTypeService;
 
+import java.util.List;
 import java.util.Set;
 
+@Profile({"default", "map"})
 @Service
 public class OwnerServiceMap extends AbstractMapService<Owner, Long> implements OwnerService {
 
@@ -70,5 +73,13 @@ public class OwnerServiceMap extends AbstractMapService<Owner, Long> implements 
                 .findFirst()
                 .map(a -> a.getValue())
                 .orElse(null);
+    }
+
+    @Override
+    public List<Owner> findAllByLastNameLike(String lastName) {
+        return map.entrySet().stream()
+                .filter(a -> a.getValue().getLastName().toLowerCase().contains(lastName.replaceAll("%", "").toLowerCase()))
+                .map(a -> a.getValue())
+                .toList();
     }
 }

@@ -12,12 +12,13 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uz.brogrammer.petclinic.model.Owner;
 import uz.brogrammer.petclinic.service.OwnerService;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -45,16 +46,6 @@ class OwnerControllerTest {
     }
 
     @Test
-    void listOwners() throws Exception {
-
-        mockMvc.perform(get("/owners/find"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("notimplemented"));
-
-        Mockito.verifyNoInteractions(ownerService);
-    }
-
-    @Test
     void displayOwner() throws Exception {
         when(ownerService.findById(anyLong())).thenReturn(Owner.builder().id(1L).build());
 
@@ -63,4 +54,37 @@ class OwnerControllerTest {
                 .andExpect(view().name("owner/ownerDetails"))
                 .andExpect(model().attribute("owner", hasProperty("id", is(1L))));
     }
+
+    @Test
+    void findOwners() throws Exception {
+        mockMvc.perform(get("/owners/find"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("owner/findOwners"));
+        Mockito.verifyNoInteractions(ownerService);
+    }
+
+    @Test
+    void processFindFormReturnOne() throws Exception {
+        when(ownerService.findAllByLastNameLike(anyString())).thenReturn(Arrays.asList(Owner.builder().id(1l).build()));
+
+        mockMvc.perform(get("/owners"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/owners/1"));
+    }
+
+    @Test
+    void processFindFormEmptyReturnMany() throws Exception {
+        when(ownerService.findAllByLastNameLike(anyString()))
+                .thenReturn(Arrays.asList(Owner.builder().id(1l).build(),
+                        Owner.builder().id(2l).build()));
+
+        mockMvc.perform(get("/owners")
+                        .param("lastName", ""))
+                .andExpect(status().isOk())
+                .andExpect(view().name("owner/ownersList"))
+                .andExpect(model().attribute("selections", hasSize(2)));
+        ;
+    }
+
+
 }
