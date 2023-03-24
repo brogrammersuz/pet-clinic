@@ -15,9 +15,12 @@ import uz.brogrammer.petclinic.service.OwnerService;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
 class OwnerControllerTest {
@@ -49,5 +52,15 @@ class OwnerControllerTest {
                 .andExpect(view().name("notimplemented"));
 
         Mockito.verifyNoInteractions(ownerService);
+    }
+
+    @Test
+    void displayOwner() throws Exception {
+        when(ownerService.findById(anyLong())).thenReturn(Owner.builder().id(1L).build());
+
+        mockMvc.perform(get("/owners/123"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("owner/ownerDetails"))
+                .andExpect(model().attribute("owner", hasProperty("id", is(1L))));
     }
 }

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -22,6 +24,8 @@ public class Pet extends BaseEntity {
     private Owner owner;
     @Column(name ="birth_date")
     private LocalDate birthDate;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pet")
+    private Set<Visit> visits = new HashSet<>();
 
     @Builder
     public Pet(Long id, String name, PetType petType, Owner owner, LocalDate birthDate) {
