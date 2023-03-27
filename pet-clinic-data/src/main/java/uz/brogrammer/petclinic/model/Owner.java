@@ -5,7 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -30,6 +29,31 @@ public class Owner extends Person {
         this.address = address;
         this.city = city;
         this.telephone = telephone;
-        this.pets = pets;
+        if (pets != null) {
+            this.pets = pets;
+        }
     }
+
+    public Pet getPet(String name, boolean ignoreNew) {
+        /*
+        name = name.toLowerCase();
+        for (Pet pet : pets) {
+            if (!ignoreNew || !pet.isNew()) {
+                if (pet.getName().toLowerCase().equals(name)) {
+                    return pet;
+                }
+            }
+        }
+        return null;
+         */
+
+        String finalName = name.toLowerCase();
+        return pets.stream()
+                .filter(pet -> (!ignoreNew || !pet.isNew()))
+                .filter(pet -> pet.getName().toLowerCase().equals(finalName))
+                .findAny()
+                .orElse(null);
+
+    }
+
 }
